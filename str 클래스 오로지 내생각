@@ -1,0 +1,118 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <string.h>
+#include <iostream>
+
+class string {
+    char* str;
+    int len;
+
+public:
+    string(char c, int n);  // 문자 c 가 n 개 있는 문자열로 정의
+    string(const char* s);
+    string(const string& s);
+    ~string();
+
+    void add_string(const string& s);   // str 뒤에 s 를 붙인다.
+    void copy_string(const string& s);  // str 에 s 를 복사한다.
+    int strlen();                       // 문자열 길이 리턴
+    void print();// str 출력
+
+};
+
+string::string(char c,int n) {
+    len = n;
+    str = new char[len+1];
+    for (int i = 0; i < len; i++) {
+        str[i] = c;
+    }
+    str[len] = NULL;
+}
+
+string::string(const char* s) {
+    int i = 0;
+    while (s[i] != NULL)
+        i++;
+    
+    len = i;
+    str = new char[len + 1];
+
+    for (int i = 0; i < len; i++) {
+        str[i] = s[i];
+    }
+    str[len] = NULL;
+
+}
+
+string::string(const string& s) {
+    len = s.len;
+    str = new char[len + 1];
+
+    for (int i = 0; i < len; i++) {
+        str[i] = s.str[i];
+    }
+    str[len] = NULL;
+
+}
+
+string::~string() {
+    if (str) delete[] str;
+}
+
+int string::strlen() {
+    return len;
+}
+
+void string::add_string(const string& s) {
+    len += s.len;
+    char* temp = new char[len + 1];
+    int i = 0;
+
+    while (str[i]) {
+        temp[i] = str[i];
+        i++;
+    }
+
+    int j = 0;
+    while (i + j < len) {
+        temp[i + j] = s.str[j];
+        j++;
+    }
+    
+    delete[] str;
+    temp[len] = NULL;
+
+    str = temp;
+
+}
+
+void string::copy_string(const string& s) {
+    len = s.len;
+
+    char* temp = new char[len + 1];
+
+    for (int i = 0; i < len; i++) {
+        temp[i] = s.str[i];
+    }
+    temp[len] = NULL;
+    delete[] str;
+    str = temp;
+
+}
+
+void string::print() {
+    std::cout << str << std::endl;
+}
+
+int main() {
+    string s1('a', 5);
+    string s2("asdqwe");
+    string s3(s2);
+
+    s1.print();
+    s2.print();
+    s3.print();
+
+    s3.copy_string("1254689");
+    s3.print();
+
+}
