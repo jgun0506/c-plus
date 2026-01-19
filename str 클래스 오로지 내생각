@@ -7,21 +7,24 @@ class string {
     int len;
 
 public:
-    string(char c, int n);  // 문자 c 가 n 개 있는 문자열로 정의
-    string(const char* s);
+    string(char c, int n);  //char 로부터 문자열 생성
+    string(const char* s); // char* 로부터 문자열 생성
     string(const string& s);
     ~string();
 
-    void add_string(const string& s);   // str 뒤에 s 를 붙인다.
-    void copy_string(const string& s);  // str 에 s 를 복사한다.
-    int strlen();                       // 문자열 길이 리턴
-    void print();// str 출력
+    void add_string(const string& s);//다른문자열 뒤에 다른문자열 붙이기   
+    int strlen();//문자열 길이 리턴             
+
+    void is_equel(const string& s);//문자열이 같은지 비교
+    void compare(const string& s);//문자열 크기비교
+
+    void print();
 
 };
 
-string::string(char c,int n) {
+string::string(char c, int n) {
     len = n;
-    str = new char[len+1];
+    str = new char[len + 1];
     for (int i = 0; i < len; i++) {
         str[i] = c;
     }
@@ -32,7 +35,7 @@ string::string(const char* s) {
     int i = 0;
     while (s[i] != NULL)
         i++;
-    
+
     len = i;
     str = new char[len + 1];
 
@@ -40,7 +43,6 @@ string::string(const char* s) {
         str[i] = s[i];
     }
     str[len] = NULL;
-
 }
 
 string::string(const string& s) {
@@ -51,7 +53,6 @@ string::string(const string& s) {
         str[i] = s.str[i];
     }
     str[len] = NULL;
-
 }
 
 string::~string() {
@@ -77,7 +78,7 @@ void string::add_string(const string& s) {
         temp[i + j] = s.str[j];
         j++;
     }
-    
+
     delete[] str;
     temp[len] = NULL;
 
@@ -85,19 +86,52 @@ void string::add_string(const string& s) {
 
 }
 
-void string::copy_string(const string& s) {
-    len = s.len;
-
-    char* temp = new char[len + 1];
+void string::is_equel(const string& s) {//같으면 return true
+    if (len != s.len) {
+        std::cout << "다릅니다" << std::endl;
+        return;
+    }
 
     for (int i = 0; i < len; i++) {
-        temp[i] = s.str[i];
+        if (str[i] != s.str[i]) {
+            std::cout << "다릅니다" << std::endl;
+            return;
+        }
     }
-    temp[len] = NULL;
-    delete[] str;
-    str = temp;
+    std::cout << "같습니다" << std::endl;
+    return;
+}
+
+void string::compare(const string& s) {//같으면 return 0;
+    int i = 0;
+    while (s.str[i] != NULL && str[i] != NULL) {
+        if (str[i] == s.str[i]) {
+            i++;
+            continue;
+        }
+        if (str[i] > s.str[i]) {
+            std::cout << str << "가" << s.str << "보다 크다" << std::endl;
+            return;
+        }
+        else if (str[i] < s.str[i]) {
+            std::cout << str << "가" << s.str << "보다 작다" << std::endl;
+            return;
+        }
+    }
+
+    if ((len - s.len) > 0) {
+        std::cout << str << "가" << s.str << "보다 크다" << std::endl;
+    }
+    else if ((len - s.len) < 0) {
+        std::cout << s.str << "가" << str << "보다 크다" << std::endl;
+    }
+    else {
+        std::cout << s.str << "와" << str << "는 같다" << std::endl;
+    }
+    return;
 
 }
+
 
 void string::print() {
     std::cout << str << std::endl;
@@ -105,14 +139,10 @@ void string::print() {
 
 int main() {
     string s1('a', 5);
-    string s2("asdqwe");
-    string s3(s2);
+    string s2("c");
+    string s3("bsd");
 
-    s1.print();
-    s2.print();
-    s3.print();
-
-    s3.copy_string("1254689");
-    s3.print();
+    s2.compare(s3);
+   
 
 }
