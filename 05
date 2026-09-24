@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+int main() {
+    int n,k,num;
+    vector<vector<int>> chairs;
+
+    cin>>n>>k;
+
+    while(n--){
+        char c;
+        cin>>c>>num;
+        if(c=='+'){ 
+            
+            int idx=0;//어느 의자에 앉을지 결정하는인덱스
+            if(chairs.empty()){
+                chairs.insert(chairs.begin(),{num});
+                continue;
+            }
+            
+            for(int i=0;i<chairs.size();i++){
+                if(num < chairs[i][0]){
+                    if(i==0)//만약 가장 앞자리보다 숫자작으면
+                        chairs[i].insert(chairs[i].begin(),num);
+                        //가장 앞자리에 의자추가
+                    else{
+                       //직전 의자에 추가
+                        chairs[i-1].insert(lower_bound(chairs[i-1].begin(),chairs[i-1].end(),num),num);
+                        idx=i-1;//앉게된 의자 인덱스 업데이트
+                    }
+
+
+                    //만약 2k명으로 차게된다면?
+                    if(chairs[idx].size()>=2*k){
+                        //앞부분만 남기기
+                        auto mid=chairs[idx].begin()+k-1;
+                        chairs[idx].erase(chairs[idx].begin(),mid);
+
+                        //뒷부분 생성
+                        vector<int> a(mid+1,chairs[idx].end()-1);//k개 짤라서 insert
+                        chairs.insert(chairs.begin()+idx+1,a);
+                    }
+                    break;
+                }
+            }
+            
+
+            
+        }
+        else {//-일 경우
+            for(int i=0;i<chairs.size();i++){
+                auto it = find(chairs[i].begin(),chairs[i].end(),num);
+                if(it!=chairs[i].end()){
+                    chairs[i].erase(it);//지우기
+
+                    if(chairs[i].empty())//의자 비게되면 삭제
+                        chairs.erase(chairs.begin()+i);
+                    break;
+                }
+            }
+        }
+    }
+
+    for(auto c : chairs)
+        cout<<c[0]<<"\n";
+    
+
+    return 0;
+}
